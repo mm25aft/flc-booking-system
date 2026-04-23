@@ -6,7 +6,7 @@ import java.util.Map;
 public class BookingManager {
     private final Map<String, Booking> allBookings = new HashMap<>();
     private int nextBookingId = 1;
-
+//nextbooking
     public Booking createBooking(Member member, Lesson lesson) {
         String id = generateBookingId();
         Booking booking = new Booking(id, member, lesson);

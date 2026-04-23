@@ -197,7 +197,7 @@ public class App {
                 return member;
             }
         }
-        System.out.println("Member not found.");
+        System.out.println("Member not found. Please check the ID and try again.");
         return null;
     }
 

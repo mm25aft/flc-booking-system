@@ -8,7 +8,7 @@ public class Member {
     private final String memberId;
     private final String memberName;
     private final List<Booking> bookings = new ArrayList<>();
-
+    //Handles booking a lesson for a member
     public Member(String memberId, String memberName) {
         this.memberId = memberId;
         this.memberName = memberName;

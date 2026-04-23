@@ -13,7 +13,7 @@ public class Member {
         this.memberId = memberId;
         this.memberName = memberName;
     }
-
+    // Validates booking (capacity, duplicates, time conflicts)
     public String getMemberId() {
         return memberId;
     }

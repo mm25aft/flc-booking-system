@@ -1,0 +1,174 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum Day {
+  SATURDAY
+  SUNDAY
+}
+enum TimeSlot {
+  MORNING
+  AFTERNOON
+  EVENING
+}
+enum ExerciseType {
+  YOGA
+  ZUMBA
+  AQUACISE
+  BOX_FIT
+  BODY_BLITZ
+}
+enum BookingStatus {
+  BOOKED
+  CHANGED
+  ATTENDED
+  CANCELLED
+}
+
+class Member {
+  - String memberId
+  - String memberName
+  - List<Booking> bookings
+  + String getMemberId()
+  + String getMemberName()
+  + List<Booking> getBookings()
+  + Booking bookLesson(Lesson lesson, BookingManager manager)
+  + boolean changeBooking(String bookingId, Lesson newLesson, BookingManager manager)
+  + boolean cancelBooking(String bookingId, BookingManager manager)
+  + Review attendLesson(String bookingId, int rating, String text, BookingManager manager)
+  - boolean canBookLesson(Lesson lesson, String excludeBookingId)
+}
+class Lesson {
+  - String lessonId
+  - ExerciseType exerciseType
+  - Day day
+  - TimeSlot timeSlot
+  - double price
+  - int weekendNumber
+  - int capacity
+  - List<Booking> bookings
+  - List<Review> reviews
+  + String getLessonId()
+  + ExerciseType getExerciseType()
+  + Day getDay()
+  + TimeSlot getTimeSlot()
+  + double getPrice()
+  + int getWeekendNumber()
+  + int getCapacity()
+  + List<Booking> getBookings()
+  + List<Review> getReviews()
+  + boolean hasCapacity()
+  + boolean addBooking(Booking booking)
+  + void removeBooking(Booking booking)
+  + void addReview(Review review)
+  + double averageRating()
+  + int attendedCount()
+}
+class Booking {
+  - String bookingId
+  - Member member
+  - Lesson lesson
+  - BookingStatus status
+  + String getBookingId()
+  + Member getMember()
+  + Lesson getLesson()
+  + BookingStatus getStatus()
+  + void markChanged(Lesson newLesson)
+  + void markCancelled()
+  + void markAttended()
+}
+class Review {
+  - String reviewText
+  - int rating
+  + String getReviewText()
+  + int getRating()
+  + boolean isValidRating()
+}
+class Timetable {
+  - int weekendNumber
+  - List<Lesson> lessons
+  + int getWeekendNumber()
+  + List<Lesson> getLessons()
+  + void addLesson(Lesson lesson)
+  + List<Lesson> findByDay(Day day)
+  + List<Lesson> findByExerciseType(ExerciseType type)
+  + Lesson findById(String lessonId)
+}
+class BookingManager {
+  - Map<String, Booking> allBookings
+  - int nextBookingId
+  + Booking createBooking(Member member, Lesson lesson)
+  + boolean changeBooking(String bookingId, Lesson newLesson)
+  + boolean cancelBooking(String bookingId)
+  + Booking getBooking(String bookingId)
+  + String generateBookingId()
+}
+class ReportService {
+  + LessonReport generateMonthlyLessonReport(int month, List<Timetable> timetables)
+  + ChampionReport generateMonthlyChampionReport(int month, List<Timetable> timetables)
+  - List<Timetable> selectMonthTimetables(int month, List<Timetable> timetables)
+}
+class LessonReport {
+  - int month
+  - List<LessonStats> stats
+  + int getMonth()
+  + List<LessonStats> getStats()
+}
+class LessonStats {
+  - String lessonId
+  - ExerciseType exerciseType
+  - Day day
+  - TimeSlot timeSlot
+  - int attendedCount
+  - double averageRating
+  + String getLessonId()
+  + ExerciseType getExerciseType()
+  + Day getDay()
+  + TimeSlot getTimeSlot()
+  + int getAttendedCount()
+  + double getAverageRating()
+}
+class ChampionReport {
+  - int month
+  - Map<ExerciseType, Double> incomeByType
+  - ExerciseType champion
+  + int getMonth()
+  + Map<ExerciseType, Double> getIncomeByType()
+  + ExerciseType getChampion()
+}
+
+class DataContext {
+  - List<Member> members
+  - List<Timetable> timetables
+  - BookingManager bookingManager
+  + List<Member> getMembers()
+  + List<Timetable> getTimetables()
+  + BookingManager getBookingManager()
+}
+
+class SampleData {
+  + static DataContext createSampleData()
+}
+
+class App {
+  + static void main(String[] args)
+}
+
+Member "1" -- "0..*" Booking
+Lesson "1" -- "0..*" Booking
+Lesson "1" -- "0..*" Review
+Booking "1" --> "1" Member
+Booking "1" --> "1" Lesson
+Timetable "1" -- "0..*" Lesson
+BookingManager "1" -- "0..*" Booking
+ReportService ..> Timetable
+ReportService ..> LessonReport
+ReportService ..> LessonStats
+ReportService ..> ChampionReport
+DataContext "1" -- "0..*" Member
+DataContext "1" -- "0..*" Timetable
+DataContext "1" -- "1" BookingManager
+SampleData ..> DataContext
+App ..> DataContext
+App ..> BookingManager
+App ..> ReportService
+@enduml

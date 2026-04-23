@@ -374,9 +374,9 @@ public class App {
                 if (rating >= 1 && rating <= 5) {
                     return rating;
                 }
-                System.out.println("Invalid rating. Enter a number from 1 to 5.");
+                System.out.println("Invalid rating. Please enter a number between 1 and 5.");
             } catch (NumberFormatException ex) {
-                System.out.println("Invalid rating. Enter a number from 1 to 5.");
+                System.out.println("Invalid rating. Please enter a number between 1 and 5.");
             }
         }
     }

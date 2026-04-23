@@ -291,7 +291,7 @@ public class App {
             System.out.println("Invalid action. Enter C to change or X to cancel.");
         }
     }
-
+    // Validates booking rules: capacity, duplicate bookings, and time conflicts
     private static String validateNewBooking(Member member, Lesson lesson) {
         if (!lesson.hasCapacity()) {
             return "Booking failed: lesson is full.";
